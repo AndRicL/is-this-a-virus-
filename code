@@ -1,0 +1,59 @@
+@ECHO OFF
+TITLE CCleaner 5.xx.xxxx Patcher v1.1 [WWW.CRACKINGCITY.COM]
+
+FOR %%A IN (powershell.exe) DO IF "%%~$path:A" EQU "" ECHO "Powershell" is not installed in this system but it's required. Press any key to exit...& PAUSE 1>NUL& EXIT
+NET SESSION 1>NUL 2>NUL || ECHO Requesting administrative privileges...&& (POWERSHELL -command "Start '%~f0' %* -Verb RunAs" 2>NUL& EXIT)
+
+ECHO ====================================================================
+ECHO =                                                                  =
+ECHO = ---------- Developer and Author: www.crackingcity.com ---------- =
+ECHO =                                                                  =
+ECHO ====================================================================
+ECHO. && ECHO Please wait...
+
+SET "NUL=1>NUL 2>NUL"
+SETLOCAL ENABLEDELAYEDEXPANSION ENABLEEXTENSIONS
+REG QUERY "HKLM\Hardware\Description\System\CentralProcessor\0" | FIND /I "x86" > NUL && SET "OS_Bit=32Bit" || SET "OS_Bit=64Bit"
+
+IF /I "!OS_Bit!" EQU "32Bit" (
+SET "progDir=!ProgramFiles!"
+SET "CCleanerExe=CCleaner.exe"
+) else (
+SET "progDir=!ProgramW6432!"
+SET "CCleanerExe=CCleaner64.exe"
+)
+
+SET "hostsFile=!SystemRoot!\System32\drivers\etc\hosts"
+ATTRIB -R -S -H "!hostsFile!" %NUL%
+TYPE "!hostsFile!" | FIND /I "127.0.0.1 license.piriform.com" > NUL
+	IF /I NOT "!ERRORLEVEL!" EQU "0" (
+		ECHO.>>"!hostsFile!"&&ECHO 127.0.0.1 license.piriform.com>>"!hostsFile!"
+	)
+TYPE "!hostsFile!" | FIND /I "127.0.0.1 license-api.ccleaner.com" > NUL
+	IF /I NOT "!ERRORLEVEL!" EQU "0" (
+		ECHO.>>"!hostsFile!"&&ECHO 127.0.0.1 license-api.ccleaner.com>>"!hostsFile!"
+	)
+IPCONFIG -flushdns %NUL%
+ATTRIB +R "!hostsFile!" %NUL%
+
+TASKKILL /F /IM "CCleaner64.exe" /T %NUL%
+TASKKILL /F /IM "CCleaner.exe" /T %NUL%
+COPY /Y "!progDir!\CCleaner\CCleaner.dat" "!progDir!\CCleaner\CCleaner.dat.BAK" %NUL%
+ATTRIB -R -S -H "!progDir!\CCleaner\CCleaner.dat" %NUL%
+ECHO 88a2e376e1b6f495458e0f53948c85cd5cc53afcc1cc5df59cc54fa0b8a74c9bf96d42c1cc6c3581ca2c2217fd977ca99917e25456b4addc5da0f948a6388b8a75d05466911a5671ef55ab591354fbd1e8324f34b7056933b013f53ad91a248efa44288c6d316ea2>"!progDir!\CCleaner\CCleaner.dat"
+CertUtil -f -v -decodehex "!progDir!\CCleaner\CCleaner.dat" "!progDir!\CCleaner\CCleaner.dat" %NUL%
+ATTRIB +R "!progDir!\CCleaner\CCleaner.dat" %NUL%
+
+
+START "" "!progDir!\CCleaner\!CCleanerExe!" /MONITOR %NUL%
+
+START "" "www.crackingcity.com" %NUL%
+
+ENDLOCAL
+CLS
+ECHO ====================================================================
+ECHO =                                                                  =
+ECHO = ---------- Developer and Author: www.crackingcity.com ---------- =
+ECHO =                                                                  =
+ECHO ====================================================================
+ECHO. && ECHO Patching completed!!! Press any key to exit...& PAUSE > NUL && EXIT
